@@ -14,6 +14,7 @@ class Header extends React.Component {
                 </div>
 
                 <div className='header_auth_or_add'>
+                    <Link to='/register'>РЕГИСТРАЦИЯ</Link>
                     <Link to="/login">ВОЙТИ</Link>
                 </div>
             </div>
