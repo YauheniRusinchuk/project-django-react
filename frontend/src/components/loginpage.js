@@ -1,4 +1,8 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {login} from '../actions/auth'
+import {Redirect} from 'react-router-dom'
+
 
 class LoginPage extends React.Component {
 
@@ -14,12 +18,17 @@ class LoginPage extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log("THIS IS EMAIL", this.state.email)
-        console.log("THIS IS PASSWORD", this.state.password)
+        const {email, password} = this.state;
+        if(email && password) {
+            this.props.login(email, password)
+        }
     }
 
 
     render(){
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/" />;
+        }
         return(
             <div className='login_container'>
                 <h4>ВОЙТИ</h4>
@@ -45,4 +54,9 @@ class LoginPage extends React.Component {
 }
 
 
-export default LoginPage;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+
+export default connect(mapStateToProps,{login})(LoginPage);

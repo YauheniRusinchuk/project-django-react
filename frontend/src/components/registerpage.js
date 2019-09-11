@@ -1,4 +1,7 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
+import {register} from '../actions/auth'
 
 
 class RegisterPage extends React.Component {
@@ -16,12 +19,26 @@ class RegisterPage extends React.Component {
 
         handleSubmit = (e) => {
             e.preventDefault();
-            console.log("THIS IS EMAIL", this.state.email)
-            console.log("THIS IS PASSWORD", this.state.password)
+            const {email, password, password2} = this.state;
+            if(password !== password2) {
+                return false
+            }
+            if(email && password) {
+                const data = {
+                    email,
+                    password
+                }
+                this.props.register(data)
+            }
         }
 
 
     render(){
+
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/" />;
+        }
+
         return(
             <div className='login_container'>
                 <h4>РЕГИСТРАЦИЯ</h4>
@@ -52,5 +69,12 @@ class RegisterPage extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
 
-export default RegisterPage;
+
+
+
+
+export default connect(mapStateToProps, {register})(RegisterPage);
